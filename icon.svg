@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="112" fill="#10182f"/>
+<circle cx="256" cy="220" r="132" fill="#ffd34e"/>
+<path d="M170 222c0-50 38-90 86-90s86 40 86 90-38 90-86 90-86-40-86-90z" fill="#253e70"/>
+<path d="M205 212h18m66 0h18M222 255q34 30 68 0" fill="none" stroke="#ffd34e" stroke-width="16" stroke-linecap="round"/>
+<text x="256" y="420" font-family="Arial,sans-serif" font-size="54" font-weight="900" text-anchor="middle" fill="#fff">OKOS</text>
+</svg>

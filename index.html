@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10182f">
+<meta name="description" content="Napi érdekességek, humor és kvízek.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>NAPI OKOS</title>
+<style>
+:root{--bg:#0d1428;--panel:#17213d;--panel2:#202d4e;--text:#f4f6ff;--muted:#aeb9d6;--accent:#ffd34e;--blue:#70c8ff;--green:#70e0ad}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#101a36,#0b1020 65%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+header{padding:22px 18px 16px;max-width:760px;margin:auto}
+.brand{font-size:13px;letter-spacing:3px;color:var(--accent);font-weight:800}.title{font-size:32px;font-weight:900;margin:4px 0}.subtitle{color:var(--muted);margin:0}
+main{max-width:760px;margin:auto;padding:0 14px 100px}
+.hero{background:linear-gradient(120deg,#253e70,#234c66);border:1px solid #41618d;border-radius:22px;padding:20px;margin:8px 0 18px;box-shadow:0 12px 35px #0004}
+.hero small{color:#c6e7ff;font-weight:700}.hero h2{font-size:23px;margin:8px 0}.hero p{color:#e1edff;margin:0 0 14px}
+button{border:0;border-radius:13px;padding:12px 16px;font-weight:800;font-size:15px;cursor:pointer}
+.primary{background:var(--accent);color:#18203a}.secondary{background:var(--panel2);color:var(--text);border:1px solid #3b4a70}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 4px 10px}.section-head h3{margin:0;font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.card{background:var(--panel);border:1px solid #2d3b60;border-radius:17px;padding:16px;min-height:125px}
+.card .icon{font-size:26px}.card h3{font-size:16px;margin:7px 0 4px}.card p{font-size:13px;color:var(--muted);margin:0;line-height:1.4}
+.daily{background:var(--panel);border:1px solid #2d3b60;border-radius:17px;padding:17px}
+.daily p{color:#dce5fb;line-height:1.55;margin:8px 0 0}
+.ad-placeholder{margin:18px 0;background:#131d35;border:1px dashed #526487;border-radius:13px;text-align:center;padding:13px;color:#8998ba;font-size:12px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#10182fee;backdrop-filter:blur(12px);border-top:1px solid #2c3b60;display:flex;justify-content:center;z-index:5}
+.navinner{width:min(760px,100%);display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom))}
+.navbtn{background:none;color:var(--muted);padding:7px 9px;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.navbtn span{font-size:20px}.navbtn.active{color:var(--accent)}
+.page{display:none}.page.active{display:block}
+.question{font-size:20px;font-weight:800;line-height:1.35;margin:12px 0 16px}
+.answer{display:block;width:100%;text-align:left;margin:9px 0;background:var(--panel2);color:var(--text);border:1px solid #3a4b72}
+.answer.correct{border-color:var(--green);background:#174432}.answer.wrong{border-color:#ff8585;background:#542a38}
+.muted{color:var(--muted)}.pill{display:inline-block;background:#29395f;border-radius:20px;padding:5px 10px;color:#d8e5ff;font-size:12px;font-weight:700}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.stat{flex:1;background:var(--panel);border:1px solid #2d3b60;border-radius:15px;padding:15px}.stat strong{font-size:24px;display:block;color:var(--accent)}
+.listitem{background:var(--panel);border:1px solid #2d3b60;border-radius:15px;padding:15px;margin:10px 0}
+.listitem h3{margin:0 0 6px}.listitem p{margin:0;color:var(--muted);line-height:1.5}
+input{width:100%;background:#111a31;border:1px solid #3a4b72;color:white;border-radius:12px;padding:12px;margin:8px 0}
+footer{text-align:center;color:#7786a8;font-size:11px;padding:25px 0}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">MINDEN NAP VALAMI ÚJ</div>
+  <div class="title">🧠 NAPI OKOS</div>
+  <p class="subtitle">Érdekességek, humor és napi kihívások.</p>
+  <button id="installApp" class="secondary" style="display:none;margin-top:12px">📲 Alkalmazás telepítése</button>
+</header>
+<main>
+<section id="home" class="page active">
+  <div class="hero">
+    <small>✨ A MAI KIHÍVÁS</small>
+    <h2>Edzd meg az agyad 2 perc alatt!</h2>
+    <p>Válaszolj a napi kérdésekre, gyűjts pontokat, és döntsd meg a saját rekordodat.</p>
+    <button class="primary" onclick="showPage('quiz')">Kvíz indítása →</button>
+  </div>
+  <div class="section-head"><h3>Fedezd fel!</h3><span class="pill">NAPI ÚJDONSÁG</span></div>
+  <div class="grid">
+    <div class="card" onclick="showPage('facts')"><div class="icon">🧠</div><h3>Érdekességek</h3><p>Meglepő tények a világról.</p></div>
+    <div class="card" onclick="showPage('humor')"><div class="icon">😂</div><h3>Humor</h3><p>Viccek és találós kérdések.</p></div>
+    <div class="card" onclick="showPage('quiz')"><div class="icon">🧩</div><h3>Kvízek</h3><p>Teszteld a tudásod!</p></div>
+    <div class="card" onclick="showPage('profile')"><div class="icon">🏆</div><h3>Eredményeid</h3><p>Pontok és személyes rekord.</p></div>
+  </div>
+  <div class="section-head"><h3>💡 Mai érdekesség</h3></div>
+  <div class="daily"><span class="pill">TUDTAD-E?</span><p>A polipnak három szíve van. Kettő a kopoltyúkhoz pumpálja a vért, a harmadik pedig a test többi részéhez.</p></div>
+  <div class="ad-placeholder">Hirdetés helye – tesztverzióban még nem jelenik meg reklám.</div>
+</section>
+
+<section id="facts" class="page">
+  <div class="section-head"><h3>🧠 Érdekességek</h3><span class="pill">TUDÁSTÁR</span></div>
+  <div class="listitem"><h3>🐙 Három szív</h3><p>A polipnak három szíve van: kettő a kopoltyúkhoz, egy a test többi részéhez továbbítja a vért.</p></div>
+  <div class="listitem"><h3>🌌 A világűr csendje</h3><p>A világűrben a hang nem terjed úgy, mint a levegőben, mert nincs elegendő közeg a hanghullámok továbbításához.</p></div>
+  <div class="listitem"><h3>🍯 A méz tartóssága</h3><p>A megfelelően lezárt, tiszta méz nagyon sokáig eltartható. Minőségét a tárolás és a nedvességtartalom is befolyásolja.</p></div>
+  <div class="listitem"><h3>🦒 A zsiráf nyelve</h3><p>A zsiráf hosszú nyelve segíti a levelek elérésében, még a tüskés ágakról is.</p></div>
+  <div class="ad-placeholder">Hirdetés helye – tesztverzióban még nem jelenik meg reklám.</div>
+</section>
+
+<section id="humor" class="page">
+  <div class="section-head"><h3>😂 Humor</h3><span class="pill">MOSOLYRA FEL!</span></div>
+  <div class="listitem"><h3>Autós vicc</h3><p>– Miért nem vitatkozik a gumi az autóval?<br>– Mert mindig kereken fogalmaz. 😄</p></div>
+  <div class="listitem"><h3>Találós kérdés</h3><p>Mi az: van négy lába, mégsem tud járni?<br><button class="secondary" onclick="this.nextElementSibling.hidden=false">Mutasd a választ</button><span hidden>Az asztal!</span></p></div>
+  <div class="listitem"><h3>Rövid mosoly</h3><p>– Doktor úr, mindenki levegőnek néz!<br>– Következő!</p></div>
+  <div class="ad-placeholder">Hirdetés helye – tesztverzióban még nem jelenik meg reklám.</div>
+</section>
+
+<section id="quiz" class="page">
+  <div class="section-head"><h3>🧩 Napi kvíz</h3><span class="pill" id="progress">1 / 5</span></div>
+  <div class="daily">
+    <div class="muted" id="scoreline">Helyes válaszok: 0</div>
+    <div class="question" id="question">Melyik bolygót nevezik vörös bolygónak?</div>
+    <div id="answers"></div>
+    <p id="feedback" class="muted" aria-live="polite"></p>
+    <button id="next" class="primary" onclick="nextQuestion()" hidden>Következő kérdés →</button>
+  </div>
+  <div class="ad-placeholder">Hirdetés helye – a kvíz közben nem szakítjuk meg a játékot.</div>
+</section>
+
+<section id="profile" class="page">
+  <div class="section-head"><h3>🏆 Profilom</h3></div>
+  <div class="row">
+    <div class="stat"><span class="muted">Összegyűjtött pont</span><strong id="points">0</strong></div>
+    <div class="stat"><span class="muted">Legjobb kvíz</span><strong id="best">0/5</strong></div>
+  </div>
+  <div class="listitem"><h3>Haladásod</h3><p>A pontjaid ezen a készüléken tárolódnak. Ez a próbaverzió még nem használ online fiókot.</p></div>
+  <div class="listitem"><h3>Adatvédelem</h3><p>Ez a bemutató nem kér nevet, e-mail-címet vagy helyadatot. A profiladatok helyben, a böngésző tárhelyén maradnak.</p></div>
+</section>
+<footer>NAPI OKOS • Korai próbaverzió • A tartalmak és funkciók fejlesztés alatt állnak.</footer>
+</main>
+<nav><div class="navinner">
+  <button class="navbtn active" data-page="home" onclick="showPage('home')"><span>🏠</span>Főoldal</button>
+  <button class="navbtn" data-page="facts" onclick="showPage('facts')"><span>🧠</span>Tudás</button>
+  <button class="navbtn" data-page="humor" onclick="showPage('humor')"><span>😂</span>Humor</button>
+  <button class="navbtn" data-page="quiz" onclick="showPage('quiz')"><span>🧩</span>Kvíz</button>
+  <button class="navbtn" data-page="profile" onclick="showPage('profile')"><span>👤</span>Profil</button>
+</div></nav>
+<script>
+const questions=[
+ {q:"Melyik bolygót nevezik vörös bolygónak?",a:["Vénusz","Mars","Jupiter","Szaturnusz"],c:1,why:"A Mars felszínén található vas-oxid miatt vöröses."},
+ {q:"Hány szíve van a polipnak?",a:["Egy","Kettő","Három","Négy"],c:2,why:"A polipnak három szíve van."},
+ {q:"Melyik a világ legnagyobb óceánja?",a:["Atlanti-óceán","Indiai-óceán","Jeges-tenger","Csendes-óceán"],c:3,why:"A Csendes-óceán a Föld legnagyobb óceánja."},
+ {q:"Melyik gázból van a legtöbb a Föld légkörében?",a:["Oxigén","Nitrogén","Szén-dioxid","Hidrogén"],c:1,why:"A légkör körülbelül 78%-a nitrogén."},
+ {q:"Hány perc egy óra?",a:["30","45","60","90"],c:2,why:"Egy óra 60 percből áll."}
+];
+let qi=0,correct=0,answered=false;
+let points=Number(localStorage.getItem('no_points')||0),best=Number(localStorage.getItem('no_best')||0);
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='profile')updateProfile();if(id==='quiz'&&qi===0&&!answered)renderQuestion();window.scrollTo(0,0)}
+function renderQuestion(){let q=questions[qi];document.getElementById('progress').textContent=(qi+1)+' / '+questions.length;document.getElementById('question').textContent=q.q;document.getElementById('scoreline').textContent='Helyes válaszok: '+correct;document.getElementById('feedback').textContent='';document.getElementById('next').hidden=true;answered=false;let box=document.getElementById('answers');box.innerHTML='';q.a.forEach((a,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=a;b.onclick=()=>choose(i,b);box.appendChild(b)})}
+function choose(i,btn){if(answered)return;answered=true;let q=questions[qi];document.querySelectorAll('.answer').forEach((b,j)=>{b.disabled=true;if(j===q.c)b.classList.add('correct')});if(i===q.c){correct++;points+=10;localStorage.setItem('no_points',points);document.getElementById('feedback').textContent='Helyes! +10 pont. '+q.why}else{btn.classList.add('wrong');document.getElementById('feedback').textContent='Most nem talált. '+q.why}document.getElementById('scoreline').textContent='Helyes válaszok: '+correct;document.getElementById('next').hidden=false;document.getElementById('next').textContent=qi===questions.length-1?'Eredmény megtekintése':'Következő kérdés →'}
+function nextQuestion(){if(qi<questions.length-1){qi++;renderQuestion()}else{best=Math.max(best,correct);localStorage.setItem('no_best',best);document.getElementById('question').textContent='Kész a mai kvíz!';document.getElementById('answers').innerHTML='<div class="stat"><strong>'+correct+'/'+questions.length+'</strong><span class="muted">helyes válasz</span></div>';document.getElementById('feedback').textContent='Összegyűjtött pontjaid: '+points;document.getElementById('next').hidden=false;document.getElementById('next').textContent='Vissza a főoldalra';document.getElementById('next').onclick=()=>{qi=0;correct=0;document.getElementById('next').onclick=nextQuestion;renderQuestion();showPage('home')}}}
+function updateProfile(){document.getElementById('points').textContent=points;document.getElementById('best').textContent=best+'/5'}
+renderQuestion();updateProfile();
+
+let installPrompt = null;
+const installButton = document.getElementById('installApp');
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  installPrompt = event;
+  installButton.style.display = 'inline-block';
+});
+installButton.addEventListener('click', async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt = null;
+  installButton.style.display = 'none';
+});
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
